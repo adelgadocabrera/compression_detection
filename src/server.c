@@ -214,10 +214,10 @@ int probing_s(struct Config *client_config) {
   logger("[PROBING PHASE] delta_diff = %ld", delta_diff);
 
   if (delta_diff > THRESHOLD) {
-    logger("Compression detected!");
+    logger("[PROBING PHASE] Compression detected!");
     return 1;
   } else {
-    logger("No compression was detected.");
+    logger("[PROBING PHASE] No compression was detected.");
     return 0;
   }
 }
@@ -268,6 +268,7 @@ void post_probing_s(int port, int has_compression) {
     exit(EXIT_FAILURE);
   }
 
+  logger("[POST-PROBING PHASE] Listening on port %d", port);
   len = sizeof(client_addr);
   if ((client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &len)) <
       0) {
@@ -276,6 +277,7 @@ void post_probing_s(int port, int has_compression) {
   }
 
   send_result(client_fd, has_compression);
+  logger("[POST-PROBING PHASE] Sent results to client! Closing.");
 
   close(client_fd);
   close(server_fd);
