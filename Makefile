@@ -34,17 +34,20 @@ clean:
 run: 
 	$(BIN_DIR)/$(O_FILE) $(ARGS)
 
-run_client: 
+client: 
 	$(BIN_DIR)/$(O_FILE) ./configurations/client.yaml
 
-run_client_verbose: 
+client_v: 
 	$(BIN_DIR)/$(O_FILE) ./configurations/client.yaml -v
 
-run_server: 
+server: 
 	$(BIN_DIR)/$(O_FILE) ./configurations/server.yaml
 
-run_server_verbose: 
+server_v: 
 	$(BIN_DIR)/$(O_FILE) ./configurations/server.yaml -v
 
-run_standalone: 
-	$(BIN_DIR)/$(O_FILE) ./configurations/standalone.yaml
+standalone: 
+	sudo $(BIN_DIR)/$(O_FILE) ./configurations/standalone.yaml
+
+standalone_v: 
+	sudo $(BIN_DIR)/$(O_FILE) ./configurations/standalone.yaml -v

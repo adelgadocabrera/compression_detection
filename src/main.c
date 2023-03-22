@@ -58,6 +58,7 @@ int main(int argc, char *argv[]) {
   } else if (strcmp(config->mode, SERVER_APP) == 0) {
     run_server(config->pp_port_tcp);
   } else if (strcmp(config->mode, STANDALONE_APP) == 0) {
+    run_standalone(config);
   }
   free_config(config);
 }
