@@ -1,0 +1,4 @@
+# Example configuration YAML file for SERVER 
+mode: server              # Mode only accepts "client", "server" or "standalone"
+server_ip_addr: 127.0.0.1 # The Server’s IP Address
+pp_port_tcp: 7000         # Port Number for TCP (Pre-/Post- Probing Phases)
