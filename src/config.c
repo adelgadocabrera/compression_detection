@@ -17,6 +17,7 @@ void init_config(struct Config *config) {
   config->inter_time_s = 0;
   config->udp_train_size = 0;
   config->udp_ttl = 0;
+  config->rst_timeout_s = 0;
 }
 
 // Parse yaml file
@@ -96,7 +97,12 @@ struct Config *parse_config(struct Config *config, char *filename) {
       } else if (strcmp((char *)event.data.scalar.value, "udp_ttl") == 0) {
         yaml_parser_parse(&parser, &event);
         config->udp_ttl = atoi((char *)event.data.scalar.value);
+      } else if (strcmp((char *)event.data.scalar.value, "rst_timeout_s") ==
+                 0) {
+        yaml_parser_parse(&parser, &event);
+        config->rst_timeout_s = atoi((char *)event.data.scalar.value);
       }
+
       break;
     case YAML_STREAM_END_EVENT:
       done = 1;
@@ -128,5 +134,6 @@ void print_config(struct Config *config) {
   logger("payload_size: %d", config->payload_size);
   logger("inter_time_s: %d", config->inter_time_s);
   logger("udp_train_size: %d", config->udp_train_size);
-  logger("udp_ttl: %d\n", config->udp_ttl);
+  logger("udp_ttl: %d", config->udp_ttl);
+  logger("rst_timeout_s: %d\n", config->rst_timeout_s);
 }

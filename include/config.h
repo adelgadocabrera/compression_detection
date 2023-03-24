@@ -19,6 +19,7 @@ struct Config {
   int inter_time_s;
   int udp_train_size;
   int udp_ttl;
+  int rst_timeout_s;
 };
 
 void init_config(struct Config *config);
