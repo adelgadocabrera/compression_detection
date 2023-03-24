@@ -129,7 +129,7 @@ uint16_t tcp_checksum(unsigned short *buf, int len) {
 
 void build_tcp_syn_packet(char *packet, char *src_ip, char *dst_ip,
                           uint16_t src_port, uint16_t dst_port, int ttl) {
-  int window_size = 64495;
+  int window_size = 64495; // saw this in packets in wireshark
 
   // Fill in IP header
   struct iphdr *iph = (struct iphdr *)packet;
@@ -196,7 +196,7 @@ void *listen_for_rst_packets(void *args) {
   }
 
   // Listen for incoming packets
-  char buf[65535];
+  char buf[65535]; // 2**16 - 1
   int packets_received = 0;
   struct timespec timestamps[rst_packets];
 
