@@ -23,10 +23,16 @@ struct RstArgs {
   int rst_packets;
 };
 
-int create_udp_socket(const char *dst_addr, int dst_port) {
+int create_udp_socket(const char *dst_addr, int dst_port, int ttl) {
   int sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
   if (sock_fd < 0) {
     perror("Failed to create socket");
+    return -1;
+  }
+
+  if (setsockopt(sock_fd, IPPROTO_IP, IP_TTL, &ttl, sizeof(ttl)) < 0) {
+    perror("Failed to set TTL value");
+    close(sock_fd);
     return -1;
   }
 
@@ -49,12 +55,13 @@ int create_udp_socket(const char *dst_addr, int dst_port) {
 }
 
 void send_udp_low_entropy_packet_train(const char *dst_addr, int dst_port,
-                                       int train_size, int payload_size,
+                                       int ttl, int train_size,
+                                       int payload_size,
                                        int inter_packet_delay_us) {
   char payload[payload_size];
   memset(payload, 0, payload_size);
 
-  int sock_fd = create_udp_socket(dst_addr, dst_port);
+  int sock_fd = create_udp_socket(dst_addr, dst_port, ttl);
   if (sock_fd < 0) {
     return;
   }
@@ -72,7 +79,8 @@ void send_udp_low_entropy_packet_train(const char *dst_addr, int dst_port,
 }
 
 void send_udp_high_entropy_packet_train(const char *dst_addr, int dst_port,
-                                        int train_size, int payload_size,
+                                        int ttl, int train_size,
+                                        int payload_size,
                                         int inter_packet_delay_us) {
   unsigned char payload[payload_size];
   FILE *urandom = fopen("/dev/urandom", "r");
@@ -82,7 +90,7 @@ void send_udp_high_entropy_packet_train(const char *dst_addr, int dst_port,
     return;
   }
 
-  int sock_fd = create_udp_socket(dst_addr, dst_port);
+  int sock_fd = create_udp_socket(dst_addr, dst_port, ttl);
   if (sock_fd < 0) {
     fclose(urandom);
     return;
@@ -339,7 +347,7 @@ void run_standalone(struct Config *config) {
   logger("[STANDALONE] Sending SYN packet to port_x %d", port_x);
   send_tcp_syn_packet(src_ip, dst_ip, src_port, port_x, ttl);
   logger("[STANDALONE] Sending low entropy UDP packet train");
-  send_udp_low_entropy_packet_train(dst_ip, udp_dst_port, train_size,
+  send_udp_low_entropy_packet_train(dst_ip, udp_dst_port, ttl, train_size,
                                     payload_size, inter_packet_delay_us);
   logger("[STANDALONE] Low entropy UDP packet train sent");
   logger("[STANDALONE] Sending SYN packet to port_y %d", port_y);
@@ -354,7 +362,7 @@ void run_standalone(struct Config *config) {
   logger("[STANDALONE] Sending SYN packet to port_x %d", port_x);
   send_tcp_syn_packet(src_ip, dst_ip, src_port, port_x, ttl);
   logger("[STANDALONE] Sending high entropy UDP packet train");
-  send_udp_high_entropy_packet_train(dst_ip, udp_dst_port, train_size,
+  send_udp_high_entropy_packet_train(dst_ip, udp_dst_port, ttl, train_size,
                                      payload_size, inter_packet_delay_us);
   logger("[STANDALONE] High entropy UDP packet train sent");
   logger("[STANDALONE] Sending SYN packet to port_y %d", port_y);
