@@ -13,8 +13,8 @@
 
 ## Installation / Dependencies
 Project uses docker to install dependencies and run programs in isolated containers. All you'll need to run both part1 and part2 is:
-- (Docker)[https://docs.docker.com/engine/install/]
-- (Docker Compose)[https://pypi.org/project/docker-compose/] - `pip install docker-compose`
+- [Docker](https://docs.docker.com/engine/install/)
+- [Docker Compose](https://pypi.org/project/docker-compose/) - `pip install docker-compose`
 
 
 ## How to run 
