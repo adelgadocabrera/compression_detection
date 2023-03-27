@@ -1,0 +1,14 @@
+FROM gcc AS build
+WORKDIR /app
+COPY . .
+RUN make
+
+FROM ubuntu:latest
+RUN apt-get update && apt-get install -y sudo make git libyaml-dev
+WORKDIR /app
+COPY --from=build /app /app/
+COPY ./configurations/standalone.yaml /app/configurations/
+ENV LD_LIBRARY_PATH=/usr/local/lib
+EXPOSE 8000
+CMD ["make", "standalone"]
+

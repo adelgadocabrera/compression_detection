@@ -1,6 +1,5 @@
 #include "../include/config.h"
 #include "../include/logger.h"
-#include "../include/utils.h"
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <netinet/ip.h>
@@ -13,10 +12,9 @@
 #include <time.h>
 #include <unistd.h>
 
-#define SERVER_ADDR "127.0.0.1"
-
 // Sends the client config file over TCP to the server
 void pre_probing_c(struct Config *config) {
+  char *server_ip = config->server_ip_addr;
   int dst_port = config->pp_port_tcp;
   int client_fd;
   struct sockaddr_in server_addr;
@@ -33,7 +31,7 @@ void pre_probing_c(struct Config *config) {
   server_addr.sin_family = AF_INET;
   server_addr.sin_port = htons(dst_port);
 
-  if (inet_pton(AF_INET, "127.0.0.1", &server_addr.sin_addr) <= 0) {
+  if (inet_pton(AF_INET, server_ip, &server_addr.sin_addr) <= 0) {
     perror("invalid address");
     exit(EXIT_FAILURE);
   }
@@ -46,7 +44,7 @@ void pre_probing_c(struct Config *config) {
     exit(EXIT_FAILURE);
   }
 
-  logger("Connected to server.");
+  logger("[PRE-PROBING PHASE] Connected to server.");
 
   // config file data to be sent to server
   buffer[0] = CONFIG_FILE_RQ;
@@ -58,12 +56,14 @@ void pre_probing_c(struct Config *config) {
     close(client_fd);
     return;
   } else {
-    logger("Config data sent.");
+    logger("[PRE-PROBING PHASE] Config data sent.");
   }
 
   // receive message from server
   read(client_fd, server_res, 1024);
-  logger(server_res);
+  char msg[1024] = "[PRE-PROBING PHASE]";
+  strcpy(msg + strlen("[PRE-PROBING PHASE] "), server_res);
+  logger(msg);
 }
 
 int send_udp_packet(int server_fd, struct sockaddr_in *servaddr, char *payload,
@@ -73,6 +73,7 @@ int send_udp_packet(int server_fd, struct sockaddr_in *servaddr, char *payload,
 }
 
 void probing_c(struct Config *config) {
+  char *server_ip = config->server_ip_addr;
   int inter_packet_delay_us = 300;
   int dst_port = config->dst_port_udp;
   int src_port = config->src_port_udp;
@@ -97,7 +98,7 @@ void probing_c(struct Config *config) {
   memset(&serv_addr, 0, sizeof(serv_addr));
   serv_addr.sin_family = AF_INET;
   serv_addr.sin_port = htons(dst_port);
-  serv_addr.sin_addr.s_addr = inet_addr(SERVER_ADDR);
+  serv_addr.sin_addr.s_addr = inet_addr(server_ip);
 
   // Bind the socket to the source port
   struct sockaddr_in src_addr;
@@ -172,13 +173,12 @@ char *receive_result(int sockfd, char *buffer, int buffer_size) {
 }
 
 void post_probing_c(struct Config *config) {
+  char *server_ip = config->server_ip_addr;
   int dst_port = config->pp_port_tcp;
   int server_fd;
   struct sockaddr_in server_addr;
   int buffer_size = 1024;
   char buffer[buffer_size];
-
-  char *server_ip = "127.0.0.1"; // Replace with the server IP address
 
   if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
     perror("socket creation failed");
@@ -211,13 +211,16 @@ void post_probing_c(struct Config *config) {
 }
 
 void run_client(struct Config *config) {
+  sleep(3); // give some time for server to start
   logger("[INFO] Init Pre-probing phase.");
   pre_probing_c(config); // <- run pre-probing
   logger("[INFO] Pre-probing phase completed.");
   logger("[INFO] Init Probing phase.");
+  sleep(2);          // giving buffer time for server to start UDP server
   probing_c(config); // <- run probing
   logger("[INFO] Probing phase completed.");
   logger("[INFO] Init Post-probing phase.");
+  sleep(2); // giving buffer time for server to re-start TCP server
   post_probing_c(config); // <- run post-probing
   logger("[INFO] Post-probing phase completed.");
 }

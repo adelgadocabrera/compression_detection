@@ -1,0 +1,33 @@
+version: '3'
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    image: server:${NEW_VERSION}
+    ports:
+      - "${TCP_PORT}:${TCP_PORT}/tcp"
+      - "${UDP_PORT}:${UDP_PORT}/udp"
+    environment:
+      SERVER_TCP_PORT: ${TCP_PORT}
+      SERVER_UDP_PORT: ${UDP_PORT}
+    networks:
+      - mynetwork
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    image: client:${NEW_VERSION}
+    environment:
+      SERVER_HOST: server
+      SERVER_TCP_PORT: ${TCP_PORT}
+      SERVER_UDP_PORT: ${UDP_PORT}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - server
+    networks:
+      - mynetwork
+networks:
+  mynetwork:
+

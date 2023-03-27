@@ -34,20 +34,26 @@ clean:
 run: 
 	$(BIN_DIR)/$(O_FILE) $(ARGS)
 
+part1: # run server && client in silent mode
+	make server_background && make client_v
+	
 client: 
 	$(BIN_DIR)/$(O_FILE) ./configurations/client.yaml
 
-client_v: 
+client_v: # verbose
 	$(BIN_DIR)/$(O_FILE) ./configurations/client.yaml -v
 
 server: 
 	$(BIN_DIR)/$(O_FILE) ./configurations/server.yaml
 
-server_v: 
+server_background: 
+	$(BIN_DIR)/$(O_FILE) ./configurations/server.yaml &
+
+server_v: # verbose
 	$(BIN_DIR)/$(O_FILE) ./configurations/server.yaml -v
 
-standalone: 
+part2: 
 	sudo $(BIN_DIR)/$(O_FILE) ./configurations/standalone.yaml
 
-standalone_v: 
+part2_v: # verbose
 	sudo $(BIN_DIR)/$(O_FILE) ./configurations/standalone.yaml -v
