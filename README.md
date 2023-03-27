@@ -25,7 +25,7 @@ Provided bash scripts to run the applications. Unfortunately they need sudo perm
 
 So for example, if you want to run part 1:
 ```bash
-sudo ./part1.sh -b # for building (you can skip this step)
+sudo ./part1.sh -b # for building (you can skip this step unless you want to force new build)
 sudo ./part1.sh -r # for running
 sudo ./part1.sh -r # for clean-up
 ```
