@@ -1,4 +1,5 @@
 # Project 1 
+by Alberto Delgado Cabrera
 
 ## Project Structure 
 `bin/`: This directory contains the executable file of the project, named `compdetect`. This path has been added to .gitignore to prevent from uploading bin files.
