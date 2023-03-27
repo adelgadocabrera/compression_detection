@@ -9,6 +9,5 @@ WORKDIR /app
 COPY --from=build /app /app/
 COPY ./configurations/standalone.yaml /app/configurations/
 ENV LD_LIBRARY_PATH=/usr/local/lib
-EXPOSE 8000
 CMD ["make", "standalone"]
 

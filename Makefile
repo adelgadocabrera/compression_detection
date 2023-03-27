@@ -52,8 +52,8 @@ server_background:
 server_v: # verbose
 	$(BIN_DIR)/$(O_FILE) ./configurations/server.yaml -v
 
-part2: 
+standalone: 
 	sudo $(BIN_DIR)/$(O_FILE) ./configurations/standalone.yaml
 
-part2_v: # verbose
+standalone_v: # verbose
 	sudo $(BIN_DIR)/$(O_FILE) ./configurations/standalone.yaml -v

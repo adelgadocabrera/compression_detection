@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.server
-    image: server:${NEW_VERSION}
+    image: server_p1:latest
     ports:
       - "${TCP_PORT}:${TCP_PORT}/tcp"
       - "${UDP_PORT}:${UDP_PORT}/udp"
@@ -17,7 +17,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.client
-    image: client:${NEW_VERSION}
+    image: client_p1:latest
     environment:
       SERVER_HOST: server
       SERVER_TCP_PORT: ${TCP_PORT}

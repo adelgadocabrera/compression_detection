@@ -28,30 +28,18 @@ if [[ $clean ]]; then
   exit 0
 fi
 
-# Check if the server and client images are up to date
-version_file=".version"
-if [[ -f $version_file ]]; then
-  last_version=$(cat $version_file)
-else
-  last_version=1
-fi
-version=$((last_version))
-NEW_VERSION=$((last_version + 1))
-export NEW_VERSION
-
-if docker images server:$version | awk '{print $2}' | grep -q "$version" && \
-   docker images client:$version | awk '{print $2}' | grep -q "$version" && \
+# Check if the server_p1 and client_p1 images exist, otherwise build them
+if docker images server_p1:latest | awk '{print $2}' | grep -q "latest" && \
+   docker images client_p1:latest | awk '{print $2}' | grep -q "latest" && \
    [[ -z $build_image ]]; then
-    echo "The server and client images are already up to date."
+    echo "The server_p1 and client_p1 images are already up to date."
 else
-    echo "The server and/or client images do not exist or are out of date. Building them now..."
-    docker-compose build --no-cache --build-arg VERSION=$NEW_VERSION
-    docker image rm server:$NEW_VERSION client:$NEW_VERSION 
-    echo $NEW_VERSION > $version_file
-    sudo chmod 777 .version
+    echo "The server_p1 and/or client_p1 images do not exist or are out of date. Building them now..."
+    docker-compose build --no-cache
 fi
 
 # Start the containers using Docker Compose
 if [[ $run_container ]]; then
   docker-compose up
 fi
+

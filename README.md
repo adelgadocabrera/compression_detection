@@ -11,23 +11,23 @@
 
 `README.md`: This is a simple readme file that provides some basic information about the project.
 
-## Installation 
-
-### Dependencies 
-Install `libyaml` from https://github.com/yaml/libyaml. Or you can follow these steps (taken from their README): 
-
-    $ git clone https://github.com/yaml/libyaml && cd libyaml 
-    $ ./configure
-    $ make
-    # make install
-
-Required packages:
-
-- gcc
-- libtool
-- make
+## Installation / Dependencies
+Project uses docker to install dependencies and run programs in isolated containers. All you'll need to run both part1 and part2 is:
+- (Docker)[https://docs.docker.com/engine/install/]
+- (Docker Compose)[https://pypi.org/project/docker-compose/] - `pip install docker-compose`
 
 
-### Compiling
+## How to run 
+You can do manual installation or simply use the provided bash scripts to run the applications. Unfortuantely they need sudo permissions (part 2 uses raw sockets and overall it is required to run docker and docker compose). There are 2 main programs: client/server and standalone. To run client/server you will use part1.sh and to run the standalone application you'll run part2.sh. The following flags work for either one:
+- `-b` (re)builds docker containers. Execute this when you want to update a new image in case you've made some changes. Otherwise you can directly run `-r`.
+- `-r` runs the program. If image hasn't been built it will build it first.
+- `-c` cleans containers. Execute this when done.
 
-Run `make` to compile.
+So for example, if you want to run part 1:
+```bash
+sudo ./part1.sh -b # for building (you can skip this step)
+sudo ./part1.sh -r # for running
+sudo ./part1.sh -r # for clean-up
+```
+
+Do the same for part 2 but run instead `part2.sh`.
