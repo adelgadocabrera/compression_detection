@@ -10,10 +10,10 @@ The project directory contains the following directories:
 - `include/`: This directory contains the header files used by the project.
 - `src/`: This directory contains the source code for the project. It contains a main.c file, which is the entry point of the program, and a util.c file, which contains some utility functions used by the program. The util.h header file defines the interface of these utility functions, and the Makefile is used to build the program.
 - `README.md`: This is a simple readme file that provides some basic information about the project.
-- Dockerfile.XXXX: Contains the necessary config options to create the corresponding images for client/server/standalone app 
-- part1.sh: main script to run part 1 (client/server compression detection). More info down below
-- part2.sh: main script to run part 2 (standalone compression detection). More info down below
-- Makefile: compiles the program and provides execution shortcuts to run client/server/standalone programs
+- `Dockerfile.XXXX`: Contains the necessary config options to create the corresponding images for client/server/standalone app 
+- `part1.sh`: main script to run part 1 (client/server compression detection). More info down below
+- `part2.sh`: main script to run part 2 (standalone compression detection). More info down below
+- `Makefile`: compiles the program and provides execution shortcuts to run client/server/standalone programs
 
 ## Installation / Dependencies
 To install the project dependencies and run the programs in isolated containers, the project uses Docker. To run both part 1 and part 2, you need to have:
