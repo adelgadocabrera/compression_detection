@@ -18,7 +18,7 @@ Project uses docker to install dependencies and run programs in isolated contain
 
 
 ## How to run 
-You can do manual installation or simply use the provided bash scripts to run the applications. Unfortuantely they need sudo permissions (part 2 uses raw sockets and overall it is required to run docker and docker compose). There are 2 main programs: client/server and standalone. To run client/server you will use part1.sh and to run the standalone application you'll run part2.sh. The following flags work for either one:
+Provided bash scripts to run the applications. Unfortunately they need sudo permissions (part 2 uses raw sockets and overall it is required to run docker and docker compose). There are 2 main programs: client/server and standalone. To run client/server you will use part1.sh and to run the standalone application you'll run part2.sh. The following flags work for either one:
 - `-b` (re)builds docker containers. Execute this when you want to update a new image in case you've made some changes. Otherwise you can directly run `-r`.
 - `-r` runs the program. If image hasn't been built it will build it first.
 - `-c` cleans containers. Execute this when done.
