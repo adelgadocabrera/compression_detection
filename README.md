@@ -37,8 +37,17 @@ sudo ./part1.sh -c # for clean-up
 Do the same for part 2 but use instead `part2.sh`.
 
 ### Running locally without containers
-If you wish to test the client/server application or the standalone application the project provides a `Makefile` that will make it easy for you. For either application first run `make`. Then:
-- Client/server compression detection: run first `make server` or `make server_v` if you want to run in verbose mode. Immediately after run `make client` or `make client_v` to run in verbose mode. Client will wait a couple of seconds after executed just to make sure server is ready.
+First install `libyaml`:
+```bash
+$ ./bootstrap
+$ ./configure
+$ make
+$ make install
+```
+
+If you wish to test the client/server application or the standalone application the project provides a `Makefile` that will make it easy for you. 
+- For either application first run `make`. 
+- Client/server compression detection: run first `make server` or `make server_v` if you want to run in verbose mode. Immediately after run `make client` or `make client_v` to run in verbose mode. Client will wait a couple of seconds after executed just to make sure server is ready. Alternatively, you can directly run `make part1` and will run both server and client for you.
 - Standalone compression detection: run `make standalone` or `make standalone_v` to run in verbose mode.
 - Cleanup: Once you are done you may run `make clean` to delete any executable files in `bin` folder.
 

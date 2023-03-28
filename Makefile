@@ -35,7 +35,7 @@ run:
 	$(BIN_DIR)/$(O_FILE) $(ARGS)
 
 part1: # run server && client in silent mode
-	make server_background && make client_v
+	make server_background --silent && make client --silent
 	
 client: 
 	$(BIN_DIR)/$(O_FILE) ./configurations/client.yaml
