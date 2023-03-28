@@ -36,6 +36,34 @@ sudo ./part1.sh -c # for clean-up
 
 Do the same for part 2 but use instead `part2.sh`.
 
+### Build docker images manually
+#### Part 1
+Ports from config files were fetched by the provided bash script. Therefore this will have to be set manually. Set the TCP_PORT (server's default TCP port) and UDP_PORT (server's UDP port) as environment variables. This is how ports were fetched, do something similar or manually input the ports:
+
+```bash
+# Read the server port from configurations/server.yaml
+TCP_PORT=$(grep "pp_port_tcp" configurations/server.yaml | cut -d " " -f 2)
+UDP_PORT=$(grep "dst_port_udp" configurations/client.yaml | cut -d " " -f 2)
+
+# Set the SERVER_PORT environment variable for the server container
+export TCP_PORT
+export UDP_PORT
+```
+
+With the ports set as environmental variables all that is remaining is to build the image and run it:
+
+```bash
+docker-compose build --no-cache # builds docker images (client & server)
+docker-compose up # runs both client and server
+```
+
+#### Part 2 
+This part does not require to fetch ports as the app is standalone. Therefore the process is more simple:
+```bash
+docker build -t standalone -f Dockerfile.standalone . # build docker image
+docker run --rm -it --name standalone-container standalone make standalone 2>&1 # runs program
+```
+
 ### Running locally without containers
 First install `libyaml`:
 ```bash
