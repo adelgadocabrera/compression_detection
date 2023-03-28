@@ -32,7 +32,7 @@ Either if you are running the client/server or the standalone app you have to de
 **Part 2**:
 - Adjust any of the configurations/standalone.yaml parameters as you wish. Definitions included in file. 
 
-### Official run scripts
+### Official run scripts (recommended)
 Provided are bash scripts to run the applications. Unfortunately, they need sudo permissions. (Part 2 uses raw sockets, and it is required to run Docker and Docker Compose with elevated privileges). There are two main programs: client/server and standalone. To run client/server, use part1.sh. To run the standalone application, use part2.sh. The following flags work for both:
 - `-b` (re)builds Docker containers. Execute this when you want to update a new image in case you've made some changes. Otherwise, you can directly run -r.
 - `-r` runs the program. If the image hasn't been built, it will build it first.
@@ -47,7 +47,7 @@ sudo ./part1.sh -c # for clean-up
 
 Do the same for part 2 but use instead `part2.sh`.
 
-### Build docker images manually
+### Build docker images manually (alternative)
 #### Part 1
 Ports from config files were fetched by the provided bash script. Therefore this will have to be set manually. Set the TCP_PORT (server's default TCP port) and UDP_PORT (server's UDP port) as environment variables. This is how ports were fetched, do something similar or manually input the ports:
 
