@@ -26,7 +26,7 @@ Either if you are running the client/server or the standalone app you have to de
 
 **Part 1**:
 - Make sure that `pp_port_tcp` property matches the same one in both server.yaml and client.yaml. Otherwise client will try to contact wrong port.
-- In client.yaml, `server_ip_addr` should your local ip address as we are testing locally. Obtain your local ip running `ifconfig`. When client makes request to your local ip and specified port it will be forwarded to the server contaner.
+- In client.yaml, `server_ip_addr` should be your local ip address as we are testing locally. Obtain your local ip running `ifconfig`. When client makes request to your local ip and specified port it will be forwarded to the server contaner.
 - Modify the other parameters in configurations/client.yaml and configurations/server.yaml as you wish
 
 **Part 2**:
