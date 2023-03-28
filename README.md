@@ -3,6 +3,18 @@ by Alberto Delgado Cabrera
 
 This project provides a compression detection system with two main applications: client/server and standalone. This README file provides information on how to use the project and its features.
 
+**Table of contents**:
+1. [Project 1](#project-1)
+2. [Project Structure](#project-structure)
+3. [Installation / Dependencies](#installation--dependencies)
+4. [How to run](#how-to-run)
+   - [Official run scripts (recommended)](#official-run-scripts-recommended)
+   - [Build docker images manually (alternative)](#build-docker-images-manually-alternative)
+     - [Part 1](#part-1)
+     - [Part 2](#part-2)
+   - [Running locally (containers building failed)](#running-locally-containers-building-failed)
+5. [PCAP files](#pcap-files)
+
 ## Project Structure 
 The project directory contains the following directories:
 - `bin/`: This directory contains the executable file of the project, named `compdetect`. This path has been added to .gitignore to prevent from uploading bin files.
