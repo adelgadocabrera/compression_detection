@@ -22,6 +22,17 @@ To install the project dependencies and run the programs in isolated containers,
 
 
 ## How to run 
+Either if you are running the client/server or the standalone app you have to define the ports, ips and other parameters found in `configurations/*.yaml` files. 
+
+**Part 1**:
+- Make sure that `pp_port_tcp` property matches the same one in both server.yaml and client.yaml. Otherwise client will try to contact wrong port.
+- In client.yaml, `server_ip_addr` should your local ip address as we are testing locally. Obtain your local ip running `ifconfig`. When client makes request to your local ip and specified port it will be forwarded to the server contaner.
+- Modify the other parameters in configurations/client.yaml and configurations/server.yaml as you wish
+
+**Part 2**:
+- Adjust any of the configurations/standalone.yaml parameters as you wish. Definitions included in file. 
+
+### Official run scripts
 Provided are bash scripts to run the applications. Unfortunately, they need sudo permissions. (Part 2 uses raw sockets, and it is required to run Docker and Docker Compose with elevated privileges). There are two main programs: client/server and standalone. To run client/server, use part1.sh. To run the standalone application, use part2.sh. The following flags work for both:
 - `-b` (re)builds Docker containers. Execute this when you want to update a new image in case you've made some changes. Otherwise, you can directly run -r.
 - `-r` runs the program. If the image hasn't been built, it will build it first.
