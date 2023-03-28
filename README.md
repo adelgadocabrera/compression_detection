@@ -24,7 +24,7 @@ To install the project dependencies and run the programs in isolated containers,
 ## How to run 
 Either if you are running the client/server or the standalone app you have to define the ports, ips and other parameters found in `configurations/*.yaml` files. 
 
-**Part 1**:
+**Part 1 (!important)**:
 - Make sure that `pp_port_tcp` property matches the same one in both server.yaml and client.yaml. Otherwise client will try to contact wrong port.
 - In client.yaml, `server_ip_addr` should be your local ip address as we are testing locally. Obtain your local ip running `ifconfig`. When client makes request to your local ip and specified port it will be forwarded to the server contaner.
 - Modify the other parameters in configurations/client.yaml and configurations/server.yaml as you wish
