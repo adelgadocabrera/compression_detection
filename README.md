@@ -75,7 +75,7 @@ docker build -t standalone -f Dockerfile.standalone . # build docker image
 docker run --rm -it --name standalone-container standalone make standalone 2>&1 # runs program
 ```
 
-### Running locally without containers
+### Running locally (containers building failed)
 First install `libyaml`:
 ```bash
 $ ./bootstrap
