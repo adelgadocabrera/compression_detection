@@ -2,11 +2,11 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-/** possible requests types between client / server */
+// Possible requests types between client / server
 #define SHUTDOWN_RQ 0x01
 #define CONFIG_FILE_RQ 0x10
 
-/** config struct and methods */
+// Config struct and methods
 struct Config {
   char *mode;
   char *server_ip_addr;
@@ -22,9 +22,17 @@ struct Config {
   int rst_timeout_s;
 };
 
+// Initializes a Config struct with default values
 void init_config(struct Config *config);
+
+// Reads a configuration file and updates the Config struct with the values
+// found
 struct Config *parse_config(struct Config *, char *filename);
+
+// Frees memory allocated for a Config struct
 void free_config(struct Config *config);
+
+// Prints the values in a Config struct
 void print_config(struct Config *config);
 
 #endif // CONFIG_H

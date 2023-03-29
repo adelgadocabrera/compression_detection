@@ -114,12 +114,14 @@ struct Config *parse_config(struct Config *config, char *filename) {
   return config;
 }
 
+// Free memory for Config struct
 void free_config(struct Config *config) {
   free(config->mode);
   free(config->server_ip_addr);
   free(config);
 }
 
+// Prints config struct in a readable manner
 void print_config(struct Config *config) {
   logger("");
   logger("YAML Config");

@@ -23,6 +23,11 @@ struct RstArgs {
   int rst_packets;
 };
 
+// This function creates a UDP socket and sets its time-to-live (TTL) value. It
+// then sets the destination address and port using the provided parameters, and
+// connects the socket to the destination address. If successful, it returns the
+// socket file descriptor, and if any error occurs, it returns -1 and prints an
+// error message.
 int create_udp_socket(const char *dst_addr, int dst_port, int ttl) {
   int sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
   if (sock_fd < 0) {
@@ -54,6 +59,9 @@ int create_udp_socket(const char *dst_addr, int dst_port, int ttl) {
   return sock_fd;
 }
 
+// This function sends a train of low-entropy packets over UDP to a specified
+// destination address and port, with a specified time-to-live (TTL) value,
+// train size, payload size, and inter-packet delay.
 void send_udp_low_entropy_packet_train(const char *dst_addr, int dst_port,
                                        int ttl, int train_size,
                                        int payload_size,
@@ -78,6 +86,11 @@ void send_udp_low_entropy_packet_train(const char *dst_addr, int dst_port,
   close(sock_fd);
 }
 
+// This function sends a high-entropy packet train over UDP to a specified
+// destination address and port using random bytes generated from /dev/urandom.
+// The payload size, number of packets in the train, and inter-packet delay can
+// be specified as parameters, as well as the time-to-live (TTL) value for the
+// packets.
 void send_udp_high_entropy_packet_train(const char *dst_addr, int dst_port,
                                         int ttl, int train_size,
                                         int payload_size,
@@ -121,6 +134,11 @@ void send_udp_high_entropy_packet_train(const char *dst_addr, int dst_port,
   close(sock_fd);
 }
 
+// This function calculates the TCP checksum for a given buffer of unsigned
+// shorts. It iterates over the buffer two bytes at a time, accumulating the sum
+// of each pair of bytes. If the buffer has an odd number of bytes, it also adds
+// the last byte to the sum. Then it performs a carry operation on the sum, and
+// takes the one's complement of the result to obtain the final checksum value.
 uint16_t tcp_checksum(unsigned short *buf, int len) {
   unsigned long sum = 0;
   while (len > 1) {
@@ -135,6 +153,12 @@ uint16_t tcp_checksum(unsigned short *buf, int len) {
   return (uint16_t)~sum;
 }
 
+// This function builds a TCP SYN packet with a specified source IP address,
+// destination IP address, source port, destination port, and time-to-live
+// (TTL). It first fills in the IP header and then the TCP header with the SYN
+// flag set. It also sets the window size and computes the TCP checksum. The
+// function takes a pointer to the packet buffer as an argument and modifies it
+// directly.
 void build_tcp_syn_packet(char *packet, char *src_ip, char *dst_ip,
                           uint16_t src_port, uint16_t dst_port, int ttl) {
   int window_size = 64495; // saw this in packets in wireshark
@@ -191,6 +215,15 @@ void build_tcp_syn_packet(char *packet, char *src_ip, char *dst_ip,
   tcph->check = tcp_checksum((uint16_t *)buf, sizeof(buf));
 }
 
+// This function listens for incoming RST packets on a raw socket and records
+// the timestamps of the received packets. It continues listening until it
+// receives a specified number of RST packets or a timeout is reached. If enough
+// RST packets are received, it calculates the time differences between the
+// first and second packet and the third and fourth packet, and compares them to
+// a threshold value. If the time difference is greater than the threshold, it
+// assumes that compression is being used. The function prints a message
+// indicating whether compression was detected or not. If not enough RST packets
+// are received, the function prints a message indicating that fact.
 void *listen_for_rst_packets(void *args) {
   struct RstArgs *rst_args = (struct RstArgs *)args;
   int rst_timeout_s = rst_args->rst_timeout_s;
@@ -274,6 +307,13 @@ void *listen_for_rst_packets(void *args) {
   return NULL;
 }
 
+// Sends a TCP SYN packet to initiate a TCP connection with a destination host.
+// The function creates a raw socket and sets the IP_HDRINCL option to specify
+// that the IP header will be included in the packet data. Then it builds a TCP
+// SYN packet using the build_tcp_syn_packet function and sets the destination
+// address. Finally, it sends the packet using sendto function and closes the
+// socket. The parameters of the function include the source and destination IP
+// addresses and port numbers, as well as the TTL value for the packet.
 void send_tcp_syn_packet(char *src_ip, char *dst_ip, unsigned short src_port,
                          unsigned short dst_port, int ttl) {
   // Create raw socket
@@ -314,6 +354,12 @@ void send_tcp_syn_packet(char *src_ip, char *dst_ip, unsigned short src_port,
   close(sock);
 }
 
+// The run_standalone function is the main function that sends packets and
+// listens for RST packets in order to detect compression. It sends a sequence
+// of packets, including a TCP SYN packet to two different ports, followed by a
+// train of low or high entropy UDP packets, and then another TCP SYN packet to
+// the second port. It also starts a thread to listen for RST packets and waits
+// for it to finish.
 void run_standalone(struct Config *config) {
   int src_port = config->pp_port_tcp;
   char *src_ip = "127.0.0.1";

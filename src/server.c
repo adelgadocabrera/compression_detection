@@ -15,6 +15,11 @@
 
 #define THRESHOLD 100000
 
+// This function receives a message from a client on a given file descriptor,
+// extracts a configuration struct from the message, and returns a pointer to
+// it. If the message is a shutdown request, it will shut down the server. If
+// the message is not recognized, it sends a response indicating that the
+// message is unrecognized.
 struct Config *recv_config(int server_fd, int client_fd) {
   char buffer[sizeof(struct Config) + 1] = {0};
   struct Config *client_config = malloc(sizeof(struct Config));
@@ -63,6 +68,10 @@ struct Config *recv_config(int server_fd, int client_fd) {
   }
 }
 
+// This function sets up a TCP server on a specified port and listens for
+// incoming connections. Once a connection is established, it receives a
+// configuration file from the client and returns the parsed configuration as a
+// struct Config pointer.
 struct Config *pre_probing_s(int port) {
   int server_fd, client_fd; // file descriptors
   struct sockaddr_in server_addr, client_addr;
@@ -121,12 +130,23 @@ struct Config *pre_probing_s(int port) {
   return client_config;
 }
 
+// Receives a UDP packet on a socket, storing the payload in a buffer and its
+// size in a variable. The source address and port of the packet are stored in a
+// sockaddr_in structure.
 void receive_udp_packet(int sockfd, struct sockaddr_in *cliaddr, char *payload,
                         int *payload_size, socklen_t *len) {
   *payload_size = recvfrom(sockfd, payload, *payload_size, 0,
                            (struct sockaddr *)cliaddr, len);
 }
 
+// The probing_s function performs the probing phase of the server application.
+// It receives a client configuration object and uses the UDP protocol to
+// receive two packet trains (low-entropy and high-entropy) from the client. It
+// measures the time it takes to receive each packet train and calculates the
+// difference between the two. If the difference exceeds a certain threshold, it
+// logs a message indicating that compression was detected and returns 1,
+// otherwise, it logs a message indicating that no compression was detected and
+// returns 0.
 int probing_s(struct Config *client_config) {
   int dst_port = client_config->dst_port_udp;
   int train_size = client_config->udp_train_size;
@@ -222,6 +242,10 @@ int probing_s(struct Config *client_config) {
   }
 }
 
+// The send_result function sends a message to a socket indicating whether or
+// not compression was detected during a probing phase. If compression was
+// detected, the message reads "Compression detected!". Otherwise, the message
+// reads "No compression was detected."
 void send_result(int sock_fd, int compression_detected) {
   char *message;
   if (compression_detected) {
@@ -232,6 +256,11 @@ void send_result(int sock_fd, int compression_detected) {
   send(sock_fd, message, strlen(message), 0);
 }
 
+// The post_probing_s function sets up a TCP server on the specified port and
+// listens for incoming connections from the client. Once a connection is
+// established, the server sends the result of the probing phase (whether
+// compression was detected or not) to the client and then closes the connection
+// and the server socket.
 void post_probing_s(int port, int has_compression) {
   int server_fd, client_fd;
   struct sockaddr_in server_addr, client_addr;
@@ -283,7 +312,10 @@ void post_probing_s(int port, int has_compression) {
   close(server_fd);
 }
 
-// Runs the server logic for the client/server compression detection
+// The run_server function initiates the pre-probing, probing, and post-probing
+// phases of the server-side compression detection algorithm. It takes a single
+// integer argument port which is the port number to listen on. Here's a more
+// succinct version of the function:
 void run_server(int port) {
   logger("[INFO] Init Pre-probing phase.");
   struct Config *client_config = pre_probing_s(port); // <- run pre-probing

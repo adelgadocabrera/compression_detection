@@ -12,7 +12,9 @@
 #include <time.h>
 #include <unistd.h>
 
-// Sends the client config file over TCP to the server
+// The pre_probing_c function creates a TCP socket, connects to a server, sends
+// configuration data, and receives a response. It logs the progress of the
+// pre-probing phase and exits the program if an error occurs.
 void pre_probing_c(struct Config *config) {
   char *server_ip = config->server_ip_addr;
   int dst_port = config->pp_port_tcp;
@@ -66,12 +68,19 @@ void pre_probing_c(struct Config *config) {
   logger(msg);
 }
 
+// The send_udp_packet function sends a UDP packet containing a payload of a
+// specified size to a server using the sendto system call and returns the
+// number of bytes sent.
 int send_udp_packet(int server_fd, struct sockaddr_in *servaddr, char *payload,
                     int payload_size) {
   return (int)sendto(server_fd, payload, payload_size, 0,
                      (const struct sockaddr *)servaddr, sizeof(*servaddr));
 }
 
+// This function sends low-entropy and high-entropy packet trains to a server as
+// part of the probing phase of a UDP connection, using the configuration
+// settings provided in a struct Config. It logs the progress of the probing
+// phase and exits the program if an error occurs.
 void probing_c(struct Config *config) {
   char *server_ip = config->server_ip_addr;
   int inter_packet_delay_us = 300;
@@ -163,6 +172,8 @@ void probing_c(struct Config *config) {
   close(sock_fd);
 }
 
+// Receives a result from a socket file descriptor and stores it in a buffer,
+// returning the buffer if successful or an empty string if unsuccessful.
 char *receive_result(int sockfd, char *buffer, int buffer_size) {
   int n = recv(sockfd, buffer, buffer_size - 1, 0);
   if (n > 0) {
@@ -172,6 +183,9 @@ char *receive_result(int sockfd, char *buffer, int buffer_size) {
   return "";
 }
 
+// This function establishes a TCP connection with a server specified by a given
+// IP address and port, then receives a result of the probing phase from the
+// server and prints it to the console.
 void post_probing_c(struct Config *config) {
   char *server_ip = config->server_ip_addr;
   int dst_port = config->pp_port_tcp;
@@ -210,6 +224,8 @@ void post_probing_c(struct Config *config) {
   close(server_fd);
 }
 
+// This function runs the full client process by calling the pre-probing,
+// probing, and post-probing functions with a brief delay between each phase.
 void run_client(struct Config *config) {
   sleep(3); // give some time for server to start
   logger("[INFO] Init Pre-probing phase.");

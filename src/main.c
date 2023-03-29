@@ -10,11 +10,17 @@
 #include <string.h>
 #include <unistd.h>
 
+// Struct to store args
 struct Args {
   char *filename;
   bool verbose;
 };
 
+// This function parses command line arguments passed to the program and returns
+// a struct containing the parsed arguments. It supports two flags:
+// -v for enabling verbose mode and
+// -h for displaying help message.
+// It also takes a mandatory positional argument, which is the name of a file.
 struct Args *get_args(int argc, char *argv[]) {
   int opt;
   struct Args *args = malloc(sizeof(struct Args));
@@ -38,6 +44,11 @@ struct Args *get_args(int argc, char *argv[]) {
   return args;
 }
 
+// The code is the main function of a program that reads a YAML configuration
+// file and runs different functions based on the specified mode in the
+// configuration. It initializes the configuration, parses the configuration
+// file, and executes the appropriate function based on the mode. Finally, it
+// frees the allocated memory for the configuration.
 int main(int argc, char *argv[]) {
   struct Args *args = get_args(argc, argv);
   if (strcmp(args->filename, "") == 0) {

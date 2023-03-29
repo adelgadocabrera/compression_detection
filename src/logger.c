@@ -3,8 +3,11 @@
 #include <stdio.h>
 #include <time.h>
 
+// Enable disable logging
 int debug_enabled = 0;
 
+// Logs a message to the console if debugging is enabled, including a timestamp
+// and using printf-style formatting.
 void logger(const char *format, ...) {
   if (debug_enabled) {
     // get timestamp
