@@ -16,6 +16,8 @@
 #include <time.h>
 #include <unistd.h>
 
+// 100ms in nanoseconds as fixed threshold above which compression is assumed to
+// be enabled
 #define THRESHOLD 100000000L
 
 struct RstArgs {

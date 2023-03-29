@@ -13,6 +13,8 @@
 #include <time.h>
 #include <unistd.h>
 
+// Fixed 100ms (in us) is the threshold above which is considered to have
+// compression enabled us == microseconds
 #define THRESHOLD 100000
 
 // This function receives a message from a client on a given file descriptor,
