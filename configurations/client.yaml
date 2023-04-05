@@ -5,5 +5,5 @@ src_port_udp: 9876         # Source Port Number for UDP
 dst_port_udp: 8765         # Destination Port Number for UDP
 pp_port_tcp: 7000          # Port Number for TCP (Pre-/Post- Probing Phases)
 payload_size: 1000         # The Size of the UDP Payload in the UDP Packet Train, ℓ (default value: 1000B)
-inter_time_s: 5            # Inter-Measurement Time, γ (default value: 15 seconds)
+inter_time_s: 15            # Inter-Measurement Time, γ (default value: 15 seconds)
 udp_train_size: 6000       # The Number of UDP Packets in the UDP Packet Train, n (default value: 6000 )

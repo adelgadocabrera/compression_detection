@@ -1,11 +1,11 @@
  
 mode: standalone          # Mode only accepts "client", "server" or "standalone"
 server_ip_addr: 127.0.0.1 # The Server’s IP Address
-dst_port_udp: 9239        # Destination Port Number for UDP
+dst_port_udp: 9999        # Destination Port Number for UDP
 dst_port_tcp_hsyn: 6001   # Destination Port Number for TCP Head SYN, x
 dst_port_tcp_tsyn: 6002   # Destination Port Number for TCP Tail SYN, y
 pp_port_tcp: 7001         # Port Number for TCP 
 payload_size: 1000        # The Size of the UDP Payload in the UDP Packet Train, ℓ (default value: 1000B)
-udp_train_size: 2000      # The Number of UDP Packets in the UDP Packet Train, n (default value: 6000 )
+udp_train_size: 6000      # The Number of UDP Packets in the UDP Packet Train, n (default value: 6000 )
 udp_ttl: 255              # TTL for the UDP Packets (default value: 255 )
 rst_timeout_s: 10          # How much time in seconds to wait for a RST packet until it times out
