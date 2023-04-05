@@ -1,7 +1,7 @@
 # Compiler settings
 CC = gcc
 CFLAGS = -Wall -Wextra -I include
-LDFLAGS= -lyaml
+LDFLAGS= -lyaml -pthread
 
 # Directories
 SRC_DIR = src
